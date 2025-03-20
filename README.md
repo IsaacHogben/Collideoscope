@@ -1,4 +1,6 @@
 # Collideoscope
+Project made for Slam Jam 2025
+
 ![3](https://github.com/user-attachments/assets/0084c0f5-02bc-4763-bbaf-173b8ccd8ba4)
 ![2](https://github.com/user-attachments/assets/eabeb576-e12b-4f62-917a-a41bc1144bc6)
 ![1](https://github.com/user-attachments/assets/c1b20bef-f9f3-4d3e-a8e8-b699ffa1a8be)
