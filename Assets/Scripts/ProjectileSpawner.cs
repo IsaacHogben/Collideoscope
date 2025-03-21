@@ -67,6 +67,7 @@ public class Projectile : MonoBehaviour
         if (Vector3.Distance(transform.position, center) < 0.1f)
         {
             Destroy(gameObject);
+            gameManager.UpdateScore(thisType, -1);
         }
     }
 

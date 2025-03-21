@@ -1,3 +1,4 @@
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
@@ -39,6 +40,12 @@ public class UIController : MonoBehaviour
         mainMenuScene.style.display = DisplayStyle.None; // Hide Menu
         playScene.style.display = DisplayStyle.Flex; // Show Game UI
         gameManager.StartGame();
+        UpdateScore(0);
+    }
+
+    public void ReturnToMenu()
+    {
+        mainMenuScene.style.display = DisplayStyle.Flex; // Hide Menu
     }
 
     void FreedrawButtonPressed()

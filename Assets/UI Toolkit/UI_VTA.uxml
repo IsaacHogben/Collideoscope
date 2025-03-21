@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/UI%20Toolkit/MainMenuButton.uss?fileID=7433441132597879392&amp;guid=7ce4b77db1a5c6344aa46870a39cb643&amp;type=3#MainMenuButton" />
     <ui:VisualElement name="mainMenuScene" style="flex-grow: 1; align-items: center; justify-content: center; align-content: flex-start; position: absolute; right: 0; bottom: 0; left: 0; top: 0;">
         <ui:Button text="Start" name="playButton" class="Button MainMenuButton" style="position: relative; left: auto; top: 0; width: 109px; height: 44px;" />
-        <ui:Button text="Free Draw" name="freedrawButton" class="MainMenuButton" style="position: relative; left: auto; width: 191px; height: 44px;" />
+        <ui:Button text="Free Draw" name="freedrawButton" class="MainMenuButton" style="position: relative; left: auto; width: 191px; height: 44px; visibility: hidden;" />
     </ui:VisualElement>
     <ui:VisualElement name="playScene" enabled="true" style="flex-grow: 1; position: absolute; right: 0; display: flex;">
         <ui:Label text="Label" name="scoreLabel" enabled="true" style="font-size: 64px; color: rgb(49, 180, 45); -unity-font-definition: url(&quot;project://database/Assets/UI%20Toolkit/Pixeland.ttf?fileID=12800000&amp;guid=0cb6d31a87218994cbff6e4b13a373ed&amp;type=3#Pixeland&quot;);" />

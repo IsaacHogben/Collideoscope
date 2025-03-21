@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     private ProjectileSpawner projectileSpawner;
     private UIController uIController;
     private BeatSystem beatSystem;
+    private ImageControl imageControl; 
     public AudioSource SFXSource;
     public AudioClip menuClick;
     public AudioClip plusScore;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         beatSystem = gameObject.GetComponent<BeatSystem>();
+        imageControl = gameObject.GetComponent<ImageControl>();
         uIController = FindFirstObjectByType<UIDocument>().GetComponent<UIController>();
         projectileSpawner = GetComponent<ProjectileSpawner>();
         projectileSpawner.SetInstance(this);
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         beatSystem.Play();
+        imageControl.StartFadeLines(162, 4, 0.1f);
     }
 
     public void SpawnProjectile(float spawnAngle)
@@ -48,15 +51,26 @@ public class GameManager : MonoBehaviour
         score += scoreToAdd;
         uIController.UpdateScore(score);
 
+
+        // Some audio features that should be part of a different controller
+        float SFXPitchVariantion = 0.15f;
+        SFXSource.pitch = 1 + Random.Range(-SFXPitchVariantion, SFXPitchVariantion);
         if (scoreUpdate > 0) // Play SFX for score update
             SFXSource.PlayOneShot(plusScore);
         else
             SFXSource.PlayOneShot(minusScore);
+        
         return scoreToAdd;
     }
 
     public void MenuClickSound()
     {
         SFXSource.PlayOneShot(menuClick);
+    }
+
+    public void EndLevel()
+    {
+        score = 0;
+        uIController.ReturnToMenu();
     }
 }

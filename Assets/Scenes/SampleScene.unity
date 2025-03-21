@@ -655,7 +655,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SFXSource: {fileID: 1413085464}
   menuClick: {fileID: 8300000, guid: 005a0a74c087f8d48b27396ff79ff539, type: 3}
-  plusScore: {fileID: 8300000, guid: 2251039f0bc80424fb69acebb0c08d02, type: 3}
+  plusScore: {fileID: 8300000, guid: e1816b60cb92358498d8e3b1a74393ba, type: 3}
   minusScore: {fileID: 8300000, guid: 65bbb173bdb9fd640b0ae9c4cb1ed897, type: 3}
   spawnInterval: 1
   maxScore: 100
@@ -673,7 +673,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderTexture: {fileID: 8400000, guid: f8867fd9d3713934b886633a3aef5de6, type: 2}
   drawingMaterial: {fileID: 2100000, guid: cc74d906585d5e34ea452e0345636a2f, type: 2}
-  fadeSpeed: 0.1
 --- !u!114 &1413085462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -692,49 +691,41 @@ MonoBehaviour:
   - chunks:
     - name: Intro
       increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
-      duration: 16
+      fadeMode: 0
+      duration: 8
       beat: 0
       pattern: 0
       spawnAngle: 0
       numberOfMirrorProjectiles: 0
     - name: spiral 1
-      increaseCollidoscopeAmountBy: 1
-      intiateFade: 0
-      duration: 16
-      beat: 0
-      pattern: 1
-      spawnAngle: 0
-      numberOfMirrorProjectiles: 0
-    - name: spiral 2
       increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
-      duration: 16
+      fadeMode: 0
+      duration: 8
       beat: 1
-      pattern: 1
+      pattern: 0
       spawnAngle: 0
       numberOfMirrorProjectiles: 0
     - name: build
-      increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
-      duration: 16
-      beat: 1
-      pattern: 0
-      spawnAngle: 0
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 1
+      duration: 48
+      beat: 3
+      pattern: 1
+      spawnAngle: 180
       numberOfMirrorProjectiles: 0
   - chunks:
     - name: New BeatChunk
       increaseCollidoscopeAmountBy: 1
-      intiateFade: 0
+      fadeMode: 0
       duration: 64
-      beat: 2
+      beat: 3
       pattern: 0
       spawnAngle: 0
       numberOfMirrorProjectiles: 0
   - chunks:
     - name: New BeatChunk
       increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
+      fadeMode: 0
       duration: 64
       beat: 0
       pattern: 1
@@ -742,8 +733,8 @@ MonoBehaviour:
       numberOfMirrorProjectiles: 0
   - chunks:
     - name: New BeatChunk
-      increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 0
       duration: 64
       beat: 0
       pattern: 0
@@ -751,8 +742,8 @@ MonoBehaviour:
       numberOfMirrorProjectiles: 0
   - chunks:
     - name: New BeatChunk
-      increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 0
       duration: 16
       beat: 3
       pattern: 0
@@ -760,7 +751,7 @@ MonoBehaviour:
       numberOfMirrorProjectiles: 0
     - name: New BeatChunk
       increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
+      fadeMode: 0
       duration: 16
       beat: 4
       pattern: 1
@@ -768,7 +759,7 @@ MonoBehaviour:
       numberOfMirrorProjectiles: 0
     - name: 16
       increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
+      fadeMode: 0
       duration: 16
       beat: 3
       pattern: 0
@@ -776,7 +767,7 @@ MonoBehaviour:
       numberOfMirrorProjectiles: 0
     - name: New BeatChunk
       increaseCollidoscopeAmountBy: 0
-      intiateFade: 0
+      fadeMode: 0
       duration: 16
       beat: 5
       pattern: 1
@@ -793,8 +784,8 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 5405124981c81b645915d4a5844fced0, type: 3}
-  m_Resource: {fileID: 8300000, guid: 5405124981c81b645915d4a5844fced0, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 285da016ca3f05943bb9f8ad5ba08a65, type: 3}
+  m_Resource: {fileID: 8300000, guid: 285da016ca3f05943bb9f8ad5ba08a65, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -893,7 +884,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.46
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -20,6 +20,7 @@ public class MirrorControl : MonoBehaviour
     public void IncrementMirrorMode(int amount)
     {
         reflectionCount += amount;
+        reflectionCount = Mathf.Clamp(reflectionCount, 0, 4);
         if (reflectionCount == 0)
         {
             mirrorMode = 0;
