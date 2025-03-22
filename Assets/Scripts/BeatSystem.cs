@@ -124,7 +124,8 @@ public class BeatSystem : MonoBehaviour
 
                     if (currentSection >= coreography.Count)
                     {
-                        EndLevel(); // Stop if we've reached the end
+                        Invoke("EndLevel", 2f); // Stop if we've reached the end
+                        isPlaying = false;
                         return;
                     }
                 }
@@ -137,7 +138,6 @@ public class BeatSystem : MonoBehaviour
 
     private void EndLevel()
     {
-        isPlaying = false;
         gameManager.EndLevel();
         // Reset
         currentBeat = 0;
@@ -162,11 +162,11 @@ public class BeatSystem : MonoBehaviour
         if (fadeMode == eFadeMode.onBeat)
             imageControl.StartFadeLines(coreography[currentSection].chunks[currentChunk].duration / 2,
                 coreography[currentSection].chunks[currentChunk].duration / GetTimeMultiplier(),
-                    0.5f);
+                    0.4f);
         else if (fadeMode == eFadeMode.steady)
             imageControl.StartFadeLines(coreography[currentSection].chunks[currentChunk].duration / 2,
                 coreography[currentSection].chunks[currentChunk].duration * 4,
-                    0.05f);
+                    0.04f);
 
     }
 
@@ -191,7 +191,16 @@ public class BeatSystem : MonoBehaviour
                 break;
         }
 
-        gameManager.SpawnProjectile(angleToSpawn); // Send request to game manager
+        // Spawn the original projectile
+        gameManager.SpawnProjectile(angleToSpawn);
+
+        // Spawn mirrored projectiles
+        int mirrorAmount = coreography[currentSection].chunks[currentChunk].numberOfMirrorProjectiles;
+        for (int i = 1; i < mirrorAmount; i++)
+        {
+            float mirroredAngle = GetMirroredAngle(angleToSpawn, i, mirrorAmount);
+            gameManager.SpawnProjectile(mirroredAngle);
+        }
     }
 
     // Adjusts beat frequency without affecting tempo
@@ -233,5 +242,35 @@ public class BeatSystem : MonoBehaviour
     {
         isPlaying = false;
         audioSource.Pause();
+    }
+
+    float GetMirroredAngle(float originalAngle, int index, int mirrorMode)
+    {
+        float mirroredAngle = originalAngle;
+
+        if (mirrorMode == 2) // Formerly mode 1
+        {
+            if (index == 1) mirroredAngle = -originalAngle; // Flip across the vertical axis
+        }
+        else if (mirrorMode == 4)
+        {
+            if (index == 1) mirroredAngle = 180 - originalAngle;
+            if (index == 2) mirroredAngle = -originalAngle;
+            if (index == 3) mirroredAngle = 180 + originalAngle;
+        }
+        else if (mirrorMode == 8)
+        {
+            int section = index % 4;
+            mirroredAngle = originalAngle + (section * 90);
+            if ((index & 1) != 0) mirroredAngle = -mirroredAngle;
+        }
+        else if (mirrorMode == 16)
+        {
+            float angleStep = 360f / 16; // 22.5-degree segments
+            mirroredAngle = originalAngle + (index * angleStep);
+            if (index % 2 == 1) mirroredAngle = -mirroredAngle; // Flip every other segment
+        }
+
+        return mirroredAngle % 360; // Keep it within 0-360 range
     }
 }
