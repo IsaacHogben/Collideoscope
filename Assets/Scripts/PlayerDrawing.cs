@@ -4,6 +4,9 @@ public class PlayerDrawing : MonoBehaviour
 {
     private Texture2D texture;
     private Color drawColor;
+    private Vector2 previousPosition;
+    private bool firstFrame = true;
+    [SerializeField] private float maxInterpolationLength = 0.1f;
 
     private void Start()
     {
@@ -13,7 +16,39 @@ public class PlayerDrawing : MonoBehaviour
     private void Update()
     {
         drawColor = ColorManager.Instance.CurrentColor;
-        DrawAtPosition(transform.position);
+        Vector2 currentPosition = transform.position;
+
+        if (!firstFrame)
+        {
+            DrawInterpolated(previousPosition, currentPosition);
+        }
+        else
+        {
+            DrawAtPosition(currentPosition);
+            firstFrame = false;
+        }
+
+        previousPosition = currentPosition;
+    }
+
+    void DrawInterpolated(Vector2 start, Vector2 end)
+    {
+        Vector2 startTex = WorldToTextureCoords(start);
+        Vector2 endTex = WorldToTextureCoords(end);
+
+        float distance = Vector2.Distance(startTex, endTex); // prevent lines appear when player mirros snap to new position
+        if (distance > maxInterpolationLength)
+            return;
+
+        int steps = Mathf.CeilToInt(Vector2.Distance(startTex, endTex));
+        for (int i = 0; i <= steps; i++)
+        {
+            Vector2 interpolated = Vector2.Lerp(startTex, endTex, (float)i / steps);
+            ImageControl.Instance.SetPixel((int)interpolated.x, (int)interpolated.y, drawColor);
+        }
+
+        ImageControl.Instance.ApplyTexture();
+        ImageControl.Instance.UpdateRenderTexture();
     }
 
     void DrawAtPosition(Vector2 worldPos)
