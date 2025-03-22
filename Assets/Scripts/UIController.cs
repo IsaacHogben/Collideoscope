@@ -1,5 +1,6 @@
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 
@@ -7,12 +8,17 @@ public class UIController : MonoBehaviour
 {
     public GameManager gameManager;
     // Menu
+    public VisualElement introScene;
     public VisualElement mainMenuScene;
     public Button playButton;
     public Button freedrawButton;
     // Game UI
     public VisualElement playScene;
     public Label scoreLabel;
+
+    private bool onIntroScene = true;
+    public Camera introCamera;
+    public AudioSource introSound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,6 +30,10 @@ public class UIController : MonoBehaviour
 
         // Initialize elements in menu
         mainMenuScene = root.Q<VisualElement>("mainMenuScene");
+        mainMenuScene.style.display = DisplayStyle.None; // Hide on start while not using
+
+        introScene = root.Q<VisualElement>("intro");
+
         playButton = root.Q<Button>("playButton");
         playButton.clicked += PlayButtonPressed;
         freedrawButton = root.Q<Button>("freedrawButton");
@@ -35,10 +45,21 @@ public class UIController : MonoBehaviour
         scoreLabel = root.Q<Label>("scoreLabel");
     }
 
+    private void Update()
+    {
+        if (onIntroScene && Input.anyKeyDown)
+        {
+            ReturnToMenu();
+            introCamera.enabled = false;
+            onIntroScene = false;
+            playScene.style.display = DisplayStyle.None;
+            introSound.Pause();
+        }
+    }
     void PlayButtonPressed()
     {
         mainMenuScene.style.display = DisplayStyle.None; // Hide Menu
-        playScene.style.display = DisplayStyle.Flex; // Show Game UI
+        introScene.style.display = DisplayStyle.None; // Show Game UI
         gameManager.StartGame();
         UpdateScore(0);
     }

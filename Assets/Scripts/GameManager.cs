@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -43,6 +44,9 @@ public class GameManager : MonoBehaviour
             //projectileSpawner.SpawnProjectile(ProjectileType.Avoid, 1f, spawnAngle);
     }
 
+    private int maxSimultaneousSounds = 3; // Set your limit
+    private int currentPlayingSounds = 0;
+
     public int UpdateScore(ProjectileType type, float scoreUpdate)
     {
         int scoreToAdd = Mathf.CeilToInt(scoreUpdate * maxScore); // normalise score to present values
@@ -53,16 +57,33 @@ public class GameManager : MonoBehaviour
 
 
         // Some audio features that should be part of a different controller
-        float SFXPitchVariantion = 0.15f;
+        float SFXPitchVariantion = 0.2f;
         SFXSource.pitch = 1 + Random.Range(-SFXPitchVariantion, SFXPitchVariantion);
-        if (scoreUpdate > 0) // Play SFX for score update
-            SFXSource.PlayOneShot(plusScore);
-        else
-            SFXSource.PlayOneShot(minusScore);
-        
+        // Only play sound if limit is not exceeded
+        if (currentPlayingSounds < maxSimultaneousSounds)
+        {
+            if (scoreUpdate > 0)
+                PlayLimitedSound(plusScore);
+            else
+                PlayLimitedSound(minusScore);
+        }
+
         return scoreToAdd;
     }
+    private void PlayLimitedSound(AudioClip clip)
+    {
+        SFXSource.PlayOneShot(clip);
+        currentPlayingSounds++;
 
+        // Decrease count after the clip duration
+        StartCoroutine(ResetSoundCount(clip.length));
+    }
+
+    private IEnumerator ResetSoundCount(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        currentPlayingSounds = Mathf.Max(0, currentPlayingSounds - 1);
+    }
     public void MenuClickSound()
     {
         SFXSource.PlayOneShot(menuClick);

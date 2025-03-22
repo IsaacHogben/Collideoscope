@@ -53,9 +53,11 @@ public class BeatSystem : MonoBehaviour
     private float secondsPerBeat;
     private float globalBeatTimer = 0f;
     public List<BeatSection> coreography;
+    public List<BeatSection> coreographyPart2;
 
     public bool isPlaying = false; // Determines with Update is ticking
-    
+
+    private List<BeatSection> currentChoreography;
     // Track song progress for section reference
     private float currentBeat = 0;
     private float beatsPlayedThisChunk = 0;
@@ -74,8 +76,10 @@ public class BeatSystem : MonoBehaviour
         imageControl = GetComponent<ImageControl>();
         mirrorControl = FindFirstObjectByType<MirrorControl>();
 
+        currentChoreography = coreography;
+
         int i = 1;
-        foreach (BeatSection section in coreography) // loop over all parts to verify formatting of coreography 
+        foreach (BeatSection section in currentChoreography) // loop over all parts to verify formatting of coreography 
         {
             int totalBeats = 0;
             foreach(BeatChunk chunk in section.chunks)
@@ -110,26 +114,26 @@ public class BeatSystem : MonoBehaviour
             beatsPlayedThisChunk++;
 
             // Move to next chunk if needed
-            if (beatsPlayedThisChunk >= coreography[currentSection].chunks[currentChunk].duration)
+            if (beatsPlayedThisChunk >= currentChoreography[currentSection].chunks[currentChunk].duration)
             {
                 beatsPlayedThisChunk = 0; // Reset chunk counter
                 currentChunk++; // Set Chunk to next chunk
                 ResetChunk();
 
                 // Move to next section if we run out of chunks ends
-                if (currentChunk >= coreography[currentSection].chunks.Count)
+                if (currentChunk >= currentChoreography[currentSection].chunks.Count)
                 {
                     currentChunk = 0;
                     currentSection++;
 
-                    if (currentSection >= coreography.Count)
+                    if (currentSection >= currentChoreography.Count)
                     {
                         Invoke("EndLevel", 2f); // Stop if we've reached the end
                         isPlaying = false;
                         return;
                     }
                 }
-                FulfillChunkRequests();
+                Invoke("FulfillChunkRequests", 0.5f); // Wait until next bar starts to set new chunk effects
                 currentTimeMultiplyer = GetTimeMultiplier(); // set new chunk tempo to current tempo
             }
         }
@@ -151,21 +155,21 @@ public class BeatSystem : MonoBehaviour
 
     private void FulfillChunkRequests()
     {
-        mirrorControl.IncrementMirrorMode(coreography[currentSection].chunks[currentChunk].increaseCollidoscopeAmountBy);
+        mirrorControl.IncrementMirrorMode(currentChoreography[currentSection].chunks[currentChunk].increaseCollidoscopeAmountBy);
         SetFadeForChunk();
     }
 
     private void SetFadeForChunk()
     {
         // strobe effect that last for the duration of the chunk and happens twice per second
-        eFadeMode fadeMode = coreography[currentSection].chunks[currentChunk].fadeMode;
+        eFadeMode fadeMode = currentChoreography[currentSection].chunks[currentChunk].fadeMode;
         if (fadeMode == eFadeMode.onBeat)
-            imageControl.StartFadeLines(coreography[currentSection].chunks[currentChunk].duration / 2,
-                coreography[currentSection].chunks[currentChunk].duration / GetTimeMultiplier(),
-                    0.4f);
+            imageControl.StartFadeLines(currentChoreography[currentSection].chunks[currentChunk].duration / 2,
+                currentChoreography[currentSection].chunks[currentChunk].duration / GetTimeMultiplier(),
+                    0.33f);
         else if (fadeMode == eFadeMode.steady)
-            imageControl.StartFadeLines(coreography[currentSection].chunks[currentChunk].duration / 2,
-                coreography[currentSection].chunks[currentChunk].duration * 4,
+            imageControl.StartFadeLines(currentChoreography[currentSection].chunks[currentChunk].duration / 2,
+                currentChoreography[currentSection].chunks[currentChunk].duration * 4,
                     0.04f);
 
     }
@@ -178,7 +182,7 @@ public class BeatSystem : MonoBehaviour
     private void MakeSpawnRequest(int currentSection, int currentChunk)
     {
         float angleToSpawn = 0;
-        eSpawnPattern pattern = coreography[currentSection].chunks[currentChunk].pattern;
+        eSpawnPattern pattern = currentChoreography[currentSection].chunks[currentChunk].pattern;
 
         switch (pattern)
         {
@@ -186,8 +190,8 @@ public class BeatSystem : MonoBehaviour
                 angleToSpawn = UnityEngine.Random.Range(0f, 24f) * 15; // Generate random spawn angle if section requires
                 break;
             case eSpawnPattern.Spiral:
-                angleToSpawn = coreography[currentSection].chunks[currentChunk].spawnAngle - currentSpiralPosition; // Else use specified spawn angle
-                currentSpiralPosition += 360 / coreography[currentSection].chunks[currentChunk].duration * GetTimeMultiplier(); // increment postion to create spiral
+                angleToSpawn = currentChoreography[currentSection].chunks[currentChunk].spawnAngle - currentSpiralPosition; // Else use specified spawn angle
+                currentSpiralPosition += (360 / currentChoreography[currentSection].chunks[currentChunk].duration * GetTimeMultiplier()) * 3; // increment postion to create spiral
                 break;
         }
 
@@ -195,7 +199,7 @@ public class BeatSystem : MonoBehaviour
         gameManager.SpawnProjectile(angleToSpawn);
 
         // Spawn mirrored projectiles
-        int mirrorAmount = coreography[currentSection].chunks[currentChunk].numberOfMirrorProjectiles;
+        int mirrorAmount = currentChoreography[currentSection].chunks[currentChunk].numberOfMirrorProjectiles;
         for (int i = 1; i < mirrorAmount; i++)
         {
             float mirroredAngle = GetMirroredAngle(angleToSpawn, i, mirrorAmount);
@@ -206,7 +210,7 @@ public class BeatSystem : MonoBehaviour
     // Adjusts beat frequency without affecting tempo
     private float GetTimeMultiplier()
     {
-        eBeatType time = coreography[currentSection].chunks[currentChunk].beat;
+        eBeatType time = currentChoreography[currentSection].chunks[currentChunk].beat;
 
         switch (time)
         {

@@ -5,6 +5,7 @@ public class ProjectileSpawner : MonoBehaviour
     private GameManager gameManager;
     public GameObject destroyPrefab; // Incomming to destroy
     public GameObject avoidPrefab; // Incoming to avoid
+    public GameObject scorePrefab;
     private float spawnRadius = 5f; // Radius of the circle
 
     public void SpawnProjectile(ProjectileType type, float speed, float spawnAngle)
@@ -27,7 +28,7 @@ public class ProjectileSpawner : MonoBehaviour
 
         // Set proj properties
         Projectile newProjectile = proj.AddComponent<Projectile>();
-        newProjectile.Initialize(speed, spawnRadius, radian, gameManager, type);
+        newProjectile.Initialize(speed, spawnRadius, radian, gameManager, type, scorePrefab);
     }
 
     public void SetInstance(GameManager _gameManager)
@@ -44,14 +45,17 @@ public class Projectile : MonoBehaviour
     private Vector3 center = Vector3.zero;
     private GameManager gameManager;
     private ProjectileType thisType;
-    public void Initialize(float speed, float radius, float radian, GameManager _gameManager, ProjectileType type)
+    private GameObject scorePrefab;
+    public void Initialize(float speed, float radius, float radian, GameManager _gameManager, ProjectileType type, GameObject scoreObj)
     {
         moveSpeed = speed;
         startRadius = radius;
         gameManager = _gameManager;
         thisType = type;
+        scorePrefab = scoreObj;
         transform.position = center + new Vector3(Mathf.Cos(radian), Mathf.Sin(radian), 0) * radius;
-        transform.rotation = Quaternion.Euler(0, 0, radian);
+        float randAngle = UnityEngine.Random.Range(0f, 360f);
+        transform.rotation = Quaternion.Euler(0, 0, randAngle * Mathf.Deg2Rad);
         //collider = GetComponent<Collider2D>();
         //transform.localScale = new Vector3(angleWidth / 360f * 2f * Mathf.PI * radius, 1, 1);
     }
@@ -63,8 +67,10 @@ public class Projectile : MonoBehaviour
         transform.localScale = new Vector3(transform.localScale.x * (1 - shrinkFactor / startRadius), transform.localScale.y * (1 - shrinkFactor / startRadius), transform.localScale.z);
         if (Vector3.Distance(transform.position, center) < 0.1f)
         {
+            
+            int displayValue = gameManager.UpdateScore(thisType, -0.5f);
+            ShowScoreText(displayValue);
             Destroy(gameObject);
-            gameManager.UpdateScore(thisType, -0.5f);
         }
     }
 
@@ -72,8 +78,21 @@ public class Projectile : MonoBehaviour
     {
         float normalizedDistance = Mathf.Clamp01(Vector3.Distance(center, transform.position) / startRadius); // Get the distance travelled to calculate score.
         int displayValue = gameManager.UpdateScore(thisType, normalizedDistance);
-        // use display value to spawn anumber showing score if time permits
+        ShowScoreText(displayValue);
         Destroy(gameObject);
     }
 
+    void ShowScoreText(int score)
+    {
+        GameObject scoreText = Instantiate(scorePrefab, GameObject.Find("Canvas").transform);
+
+        // Convert world position to UI position
+        Vector2 screenPosition = Camera.main.WorldToScreenPoint(transform.position);
+        screenPosition.y += 10; // Place above cursor
+
+        // Set anchoredPosition for UI alignment
+        RectTransform rect = scoreText.GetComponent<RectTransform>();
+        rect.position = screenPosition;
+        scoreText.GetComponent<FloatingScore>().SetScore(score);
+    }
 }

@@ -6,7 +6,7 @@ public class PlayerDrawing : MonoBehaviour
     private Color drawColor;
     private Vector2 previousPosition;
     private bool firstFrame = true;
-    [SerializeField] private float maxInterpolationLength = 0.1f;
+    [SerializeField] private float maxInterpolationLength = 0f;
 
     private void Start()
     {

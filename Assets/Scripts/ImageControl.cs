@@ -13,25 +13,25 @@ public class ImageControl : MonoBehaviour
     //public float fadeAmount = 0.1f;
     private void Awake()
     {
-        if (Instance == null)
-        {
+        //if (Instance == null)
+        //{
             Instance = this;
             sharedTexture = new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false);
             ClearTexture();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        //}
+        //else
+        //{
+            //Destroy(gameObject);
+        //}
         //StartFadeLines(162, 4, 0.1f);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        /*if (Input.GetKeyDown(KeyCode.C))
             ClearTexture();
         if (Input.GetKeyDown(KeyCode.F))
-            FadeLines();
+            FadeLines();*/
     }
 
     public void StartFadeLines(float duration, float steps, float fadeAmount)
@@ -76,8 +76,14 @@ public class ImageControl : MonoBehaviour
         sharedTexture.Apply();
     }
 
-    public Texture2D GetSharedTexture() => sharedTexture;
-    public void ApplyTexture() => sharedTexture.Apply();
+    public Texture2D GetSharedTexture()
+    { 
+        return sharedTexture;
+    }
+    public void ApplyTexture()
+    {
+        sharedTexture.Apply();
+    }
 
     public void SetPixel(int x, int y, Color color)
     {
