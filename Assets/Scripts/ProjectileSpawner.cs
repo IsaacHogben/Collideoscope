@@ -1,7 +1,4 @@
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class ProjectileSpawner : MonoBehaviour
 {
@@ -67,7 +64,7 @@ public class Projectile : MonoBehaviour
         if (Vector3.Distance(transform.position, center) < 0.1f)
         {
             Destroy(gameObject);
-            gameManager.UpdateScore(thisType, -1);
+            gameManager.UpdateScore(thisType, -0.5f);
         }
     }
 
@@ -78,4 +75,5 @@ public class Projectile : MonoBehaviour
         // use display value to spawn anumber showing score if time permits
         Destroy(gameObject);
     }
+
 }
