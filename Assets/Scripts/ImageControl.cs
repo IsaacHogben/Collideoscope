@@ -86,7 +86,8 @@ public class ImageControl : MonoBehaviour
 
     public void SetPixel(int x, int y, Color color)
     {
-        sharedTexture.SetPixel(x, y, color);
+        if (!lockImage)
+            sharedTexture.SetPixel(x, y, color);
     }
 
     public void ClearTexture()

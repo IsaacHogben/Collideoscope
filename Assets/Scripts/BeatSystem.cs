@@ -130,7 +130,7 @@ public class BeatSystem : MonoBehaviour
 
                     if (currentSection >= currentChoreography.Count)
                     {
-                        Invoke("EndLevel", 6f); // Stop if we've reached the end
+                        Invoke("EndLevel", 4f); // Stop if we've reached the end
                         isPlaying = false;
                         return;
                     }
@@ -153,6 +153,7 @@ public class BeatSystem : MonoBehaviour
         currentTimeMultiplyer = 1;
         currentSpiralPosition = 0;
         mirrorControl.IncrementMirrorMode(-4); // return to 0 reflections
+        imageControl.lockImage = true;
     }
 
     private void FulfillChunkRequests()

@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     {
         beatSystem.Play(level);
         imageControl.StartFadeLines(162, 4, 0.1f);
+        UnlockDrawing();
     }
 
     public void SpawnProjectile(float spawnAngle)

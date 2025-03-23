@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bab4d64aa8513f4408e98098d31fa534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxInterpolationLength: 17
+  maxInterpolationLength: 22
 --- !u!114 &181493248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 5
-  speed: 4
+  speed: 5
   speedOfRotation: 10
 --- !u!4 &181493249
 Transform:
@@ -2362,7 +2362,7 @@ MonoBehaviour:
       spawnAngle: 0
       numberOfMirrorProjectiles: 0
     - name: build
-      increaseCollidoscopeAmountBy: 0
+      increaseCollidoscopeAmountBy: 1
       fadeMode: 0
       duration: 16
       beat: 1
@@ -2370,7 +2370,7 @@ MonoBehaviour:
       spawnAngle: 90
       numberOfMirrorProjectiles: 0
     - name: build
-      increaseCollidoscopeAmountBy: 1
+      increaseCollidoscopeAmountBy: 0
       fadeMode: 0
       duration: 16
       beat: 1
@@ -2381,10 +2381,10 @@ MonoBehaviour:
       increaseCollidoscopeAmountBy: 0
       fadeMode: 0
       duration: 16
-      beat: 1
+      beat: 0
       pattern: 0
       spawnAngle: 180
-      numberOfMirrorProjectiles: 2
+      numberOfMirrorProjectiles: 4
   - chunks:
     - name: New BeatChunk
       increaseCollidoscopeAmountBy: 1
@@ -2409,7 +2409,7 @@ MonoBehaviour:
       beat: 0
       pattern: 0
       spawnAngle: 0
-      numberOfMirrorProjectiles: 4
+      numberOfMirrorProjectiles: 8
     - name: New BeatChunk
       increaseCollidoscopeAmountBy: 0
       fadeMode: 1
@@ -2517,7 +2517,188 @@ MonoBehaviour:
       pattern: 0
       spawnAngle: 0
       numberOfMirrorProjectiles: 4
-  coreographyHardMode: []
+  coreographyHardMode:
+  - chunks:
+    - name: spiral 1
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 16
+      beat: 0
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 0
+    - name: build
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 0
+      duration: 16
+      beat: 1
+      pattern: 1
+      spawnAngle: 90
+      numberOfMirrorProjectiles: 2
+    - name: build
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 16
+      beat: 1
+      pattern: 0
+      spawnAngle: 180
+      numberOfMirrorProjectiles: 2
+    - name: build
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 16
+      beat: 1
+      pattern: 0
+      spawnAngle: 45
+      numberOfMirrorProjectiles: 2
+  - chunks:
+    - name: low
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 0
+      duration: 8
+      beat: 1
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 2
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 8
+      beat: 5
+      pattern: 1
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 0
+    - name: low
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 8
+      beat: 1
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 2
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 1
+      duration: 8
+      beat: 5
+      pattern: 1
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 0
+    - name: low
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 8
+      beat: 4
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 4
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 24
+      beat: 0
+      pattern: 1
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 8
+  - chunks:
+    - name: On
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 1
+      duration: 8
+      beat: 1
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 4
+    - name: Off
+      increaseCollidoscopeAmountBy: -2
+      fadeMode: 0
+      duration: 8
+      beat: 1
+      pattern: 1
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 2
+    - name: On
+      increaseCollidoscopeAmountBy: 2
+      fadeMode: 1
+      duration: 8
+      beat: 1
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 4
+    - name: Off
+      increaseCollidoscopeAmountBy: -2
+      fadeMode: 0
+      duration: 8
+      beat: 1
+      pattern: 1
+      spawnAngle: 180
+      numberOfMirrorProjectiles: 2
+    - name: Off
+      increaseCollidoscopeAmountBy: 2
+      fadeMode: 0
+      duration: 32
+      beat: 1
+      pattern: 1
+      spawnAngle: 180
+      numberOfMirrorProjectiles: 4
+  - chunks:
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 32
+      beat: 1
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 8
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 1
+      duration: 16
+      beat: 0
+      pattern: 1
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 16
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: -1
+      fadeMode: 0
+      duration: 16
+      beat: 1
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 8
+  - chunks:
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 1
+      fadeMode: 1
+      duration: 16
+      beat: 3
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 4
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 16
+      beat: 3
+      pattern: 1
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 8
+    - name: 16
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 0
+      duration: 16
+      beat: 5
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 4
+    - name: New BeatChunk
+      increaseCollidoscopeAmountBy: 0
+      fadeMode: 1
+      duration: 16
+      beat: 5
+      pattern: 0
+      spawnAngle: 0
+      numberOfMirrorProjectiles: 8
   isPlaying: 0
 --- !u!82 &1413085463
 AudioSource:
@@ -2629,7 +2810,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.42
+  m_Volume: 0.32
   m_Pitch: 0.85
   Loop: 0
   Mute: 0
@@ -3753,13 +3934,13 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 3845ffa95a00b134f9c360f41df03eaf, type: 3}
   m_Resource: {fileID: 8300000, guid: 3845ffa95a00b134f9c360f41df03eaf, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.311
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 174
+  Priority: 256
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

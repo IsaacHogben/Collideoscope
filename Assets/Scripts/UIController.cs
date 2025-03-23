@@ -57,6 +57,11 @@ public class UIController : MonoBehaviour
         playScene = root.Q<VisualElement>("playScene");
         playScene.style.display = DisplayStyle.None; // Hide on start while not using
         scoreLabel = root.Q<Label>("scoreLabel");
+
+        // Intro Easter Egg
+        Label introLabel = root.Q<Label>("Label");
+        string[] messages = { "Press Every Key To Continue"};
+        introLabel.text = messages[Random.Range(0, messages.Length)];
     }
 
     private void Update()
@@ -68,10 +73,12 @@ public class UIController : MonoBehaviour
             onIntroScene = false;
             introScene.style.display = DisplayStyle.None;
             gameManager.UnlockDrawing();
+            gameManager.MenuClickSound();
         }
     }
     void PlayButtonPressed()
     {
+        gameManager.MenuClickSound();
         MenuToGame();
         gameManager.StartGame(1);
     }
@@ -85,7 +92,7 @@ public class UIController : MonoBehaviour
         UpdateScore(0);
     }
 
-    public void ReturnToMenu()
+    public void ReturnToMenu() // Happens at the end of a level
     {
         mainMenuScene.style.display = DisplayStyle.Flex;
         gameManager.inFreeDrawMode = false;
@@ -96,16 +103,19 @@ public class UIController : MonoBehaviour
 
     void FreedrawButtonPressed()
     {
+        gameManager.MenuClickSound();
         //Change Scene
         freeDrawScene.style.display = DisplayStyle.Flex;
         mainMenuScene.style.display = DisplayStyle.None;
         playScene.style.display = DisplayStyle.None;
         //Enable freedraw controls
-        gameManager.inFreeDrawMode = true; 
+        gameManager.inFreeDrawMode = true;
+        gameManager.UnlockDrawing();
     }
 
     void BackButtonPressed()
     {
+        gameManager.MenuClickSound();
         //Change Scene
         freeDrawScene.style.display = DisplayStyle.None;
         mainMenuScene.style.display = DisplayStyle.Flex;
@@ -115,6 +125,7 @@ public class UIController : MonoBehaviour
     }
     void HardModeButtonPressed()
     {
+        gameManager.MenuClickSound();
         MenuToGame();
         gameManager.StartGame(2);
     }
