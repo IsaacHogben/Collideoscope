@@ -2,17 +2,20 @@ using UnityEngine;
 using UnityEngine.InputSystem.XR;
 using UnityEngine.UIElements;
 using System.Collections;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     private ProjectileSpawner projectileSpawner;
     private UIController uIController;
     private BeatSystem beatSystem;
+    private MirrorControl mirrorControl;
     private ImageControl imageControl; 
     public AudioSource SFXSource;
     public AudioClip menuClick;
     public AudioClip plusScore;
     public AudioClip minusScore;
+    public bool inFreeDrawMode = false;
 
     public float spawnInterval = 1f; // Time between spawns
 
@@ -22,16 +25,18 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         beatSystem = gameObject.GetComponent<BeatSystem>();
+        mirrorControl = FindFirstObjectByType<MirrorControl>().GetComponent<MirrorControl>();
         imageControl = gameObject.GetComponent<ImageControl>();
         uIController = FindFirstObjectByType<UIDocument>().GetComponent<UIController>();
         projectileSpawner = GetComponent<ProjectileSpawner>();
         projectileSpawner.SetInstance(this);
         //InvokeRepeating(nameof(SpawnRandomWall), 0f, spawnInterval);
+        mirrorControl.SetMirrorMode(4); // Make the menu more interesting
     }
 
-    public void StartGame()
+    public void StartGame(int level)
     {
-        beatSystem.Play();
+        beatSystem.Play(level);
         imageControl.StartFadeLines(162, 4, 0.1f);
     }
 
@@ -57,7 +62,7 @@ public class GameManager : MonoBehaviour
 
 
         // Some audio features that should be part of a different controller
-        float SFXPitchVariantion = 0.2f;
+        float SFXPitchVariantion = 0.15f;
         SFXSource.pitch = 1 + Random.Range(-SFXPitchVariantion, SFXPitchVariantion);
         // Only play sound if limit is not exceeded
         if (currentPlayingSounds < maxSimultaneousSounds)
@@ -76,7 +81,7 @@ public class GameManager : MonoBehaviour
         currentPlayingSounds++;
 
         // Decrease count after the clip duration
-        StartCoroutine(ResetSoundCount(clip.length));
+        StartCoroutine(ResetSoundCount(clip.length / 2));
     }
 
     private IEnumerator ResetSoundCount(float delay)
@@ -92,6 +97,25 @@ public class GameManager : MonoBehaviour
     public void EndLevel()
     {
         score = 0;
+        uIController.hardModeUnlocked = true;
         uIController.ReturnToMenu();
+    }
+    private void Update()
+    {
+        if (inFreeDrawMode && Input.anyKeyDown)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) mirrorControl.SetMirrorMode(1); // No Mirror
+            if (Input.GetKeyDown(KeyCode.Alpha2)) mirrorControl.SetMirrorMode(2); // One mirrored half
+            if (Input.GetKeyDown(KeyCode.Alpha3)) mirrorControl.SetMirrorMode(3); // Four mirrored quadrants
+            if (Input.GetKeyDown(KeyCode.Alpha4)) mirrorControl.SetMirrorMode(4); // Eight-way true kaleidoscope
+            if (Input.GetKeyDown(KeyCode.Alpha5)) mirrorControl.SetMirrorMode(5); // Double Eight-way true kaleidoscope
+            if (Input.GetKeyDown(KeyCode.C)) imageControl.ClearTexture();
+            if (Input.GetKeyDown(KeyCode.F)) imageControl.FadeLines();
+        }
+    }
+
+    public void UnlockDrawing()
+    {
+        imageControl.lockImage = false;
     }
 }

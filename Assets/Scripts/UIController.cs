@@ -10,8 +10,12 @@ public class UIController : MonoBehaviour
     // Menu
     public VisualElement introScene;
     public VisualElement mainMenuScene;
+    public VisualElement freeDrawScene;
+
     public Button playButton;
     public Button freedrawButton;
+    public Button hardModeButton;
+    public Button backButton;
     // Game UI
     public VisualElement playScene;
     public Label scoreLabel;
@@ -19,6 +23,9 @@ public class UIController : MonoBehaviour
     private bool onIntroScene = true;
     public Camera introCamera;
     public AudioSource introSound;
+
+    public bool hardModeUnlocked = false;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -32,13 +39,20 @@ public class UIController : MonoBehaviour
         mainMenuScene = root.Q<VisualElement>("mainMenuScene");
         mainMenuScene.style.display = DisplayStyle.None; // Hide on start while not using
 
-        introScene = root.Q<VisualElement>("intro");
+        introScene = root.Q<VisualElement>("introScene");
+        freeDrawScene = root.Q<VisualElement>("freeDrawScene");
+        freeDrawScene.style.display = DisplayStyle.None;
 
         playButton = root.Q<Button>("playButton");
         playButton.clicked += PlayButtonPressed;
         freedrawButton = root.Q<Button>("freedrawButton");
         freedrawButton.clicked += FreedrawButtonPressed;
+        backButton = root.Q<Button>("backButton");
+        backButton.clicked += BackButtonPressed;
 
+        hardModeButton = root.Q<Button>("hardModeButton");
+        hardModeButton.clicked += HardModeButtonPressed;
+        hardModeButton.style.display = DisplayStyle.None;
         // Initialize elements in game
         playScene = root.Q<VisualElement>("playScene");
         playScene.style.display = DisplayStyle.None; // Hide on start while not using
@@ -49,31 +63,60 @@ public class UIController : MonoBehaviour
     {
         if (onIntroScene && Input.anyKeyDown)
         {
-            ReturnToMenu();
+            mainMenuScene.style.display = DisplayStyle.Flex;
             introCamera.enabled = false;
             onIntroScene = false;
-            playScene.style.display = DisplayStyle.None;
-            introSound.Pause();
+            introScene.style.display = DisplayStyle.None;
+            gameManager.UnlockDrawing();
         }
     }
     void PlayButtonPressed()
     {
+        MenuToGame();
+        gameManager.StartGame(1);
+    }
+
+    void MenuToGame()
+    {
+        introSound.Pause();
         mainMenuScene.style.display = DisplayStyle.None; // Hide Menu
-        introScene.style.display = DisplayStyle.None; // Show Game UI
-        gameManager.StartGame();
+        introScene.style.display = DisplayStyle.None;
+        playScene.style.display = DisplayStyle.Flex; // Show Game UI
         UpdateScore(0);
     }
 
     public void ReturnToMenu()
     {
-        mainMenuScene.style.display = DisplayStyle.Flex; // Hide Menu
+        mainMenuScene.style.display = DisplayStyle.Flex;
+        gameManager.inFreeDrawMode = false;
+        if (hardModeUnlocked)
+            hardModeButton.style.display = DisplayStyle.Flex; // show button for new mode upon returning
+        introSound.Play();
     }
 
     void FreedrawButtonPressed()
     {
-        //Hide Menu
+        //Change Scene
+        freeDrawScene.style.display = DisplayStyle.Flex;
+        mainMenuScene.style.display = DisplayStyle.None;
+        playScene.style.display = DisplayStyle.None;
         //Enable freedraw controls
-        //Display Freedraw Controls
+        gameManager.inFreeDrawMode = true; 
+    }
+
+    void BackButtonPressed()
+    {
+        //Change Scene
+        freeDrawScene.style.display = DisplayStyle.None;
+        mainMenuScene.style.display = DisplayStyle.Flex;
+        playScene.style.display = DisplayStyle.None;
+        //Enable freedraw controls
+        gameManager.inFreeDrawMode = false;
+    }
+    void HardModeButtonPressed()
+    {
+        MenuToGame();
+        gameManager.StartGame(2);
     }
 
     public void UpdateScore(int newValue)

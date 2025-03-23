@@ -10,6 +10,8 @@ public class ImageControl : MonoBehaviour
     private Texture2D sharedTexture;
     private Coroutine fadeRoutine;
 
+    public bool lockImage = true;
+
     //public float fadeAmount = 0.1f;
     private void Awake()
     {
@@ -28,10 +30,7 @@ public class ImageControl : MonoBehaviour
 
     private void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.C))
-            ClearTexture();
-        if (Input.GetKeyDown(KeyCode.F))
-            FadeLines();*/
+        
     }
 
     public void StartFadeLines(float duration, float steps, float fadeAmount)
@@ -62,14 +61,14 @@ public class ImageControl : MonoBehaviour
             yield return new WaitForSeconds(stepTime);
         }
     }
-    private void FadeLines()
+    public void FadeLines()
     {
         Color[] pixels = sharedTexture.GetPixels();
         Color backgroundColor = Color.black; // Change to match your background
 
         for (int i = 0; i < pixels.Length; i++)
         {
-            pixels[i] = Color.Lerp(pixels[i], backgroundColor, 0.1f);
+            pixels[i] = Color.Lerp(pixels[i], backgroundColor, 0.2f);
         }
 
         sharedTexture.SetPixels(pixels);

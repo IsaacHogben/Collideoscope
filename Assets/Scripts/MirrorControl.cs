@@ -8,7 +8,7 @@ public class MirrorControl : MonoBehaviour
 
     void Update()
     {
-        /*if (Input.GetKeyDown(KeyCode.Alpha1)) mirrorMode = 0; // No Mirror
+        if (Input.GetKeyDown(KeyCode.Alpha1)) mirrorMode = 0; // No Mirror
         if (Input.GetKeyDown(KeyCode.Alpha2)) mirrorMode = 2; // One mirrored half
         if (Input.GetKeyDown(KeyCode.Alpha3)) mirrorMode = 4; // Four mirrored quadrants
         if (Input.GetKeyDown(KeyCode.Alpha4)) mirrorMode = 8; // Eight-way true kaleidoscope
@@ -20,6 +20,18 @@ public class MirrorControl : MonoBehaviour
     public void IncrementMirrorMode(int amount)
     {
         reflectionCount += amount;
+        reflectionCount = Mathf.Clamp(reflectionCount, 0, 4);
+        if (reflectionCount == 0)
+        {
+            mirrorMode = 0;
+            return;
+        }
+        mirrorMode = Mathf.RoundToInt(Mathf.Pow(2f, reflectionCount));
+    }
+
+    public void SetMirrorMode(int mode)
+    {
+        reflectionCount = mode - 1;
         reflectionCount = Mathf.Clamp(reflectionCount, 0, 4);
         if (reflectionCount == 0)
         {

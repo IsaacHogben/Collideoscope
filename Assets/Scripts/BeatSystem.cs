@@ -52,8 +52,10 @@ public class BeatSystem : MonoBehaviour
     public float bpm = 120f;  // Base beats per minute
     private float secondsPerBeat;
     private float globalBeatTimer = 0f;
+    public AudioClip trackOne;
+    public AudioClip trackTwo;
     public List<BeatSection> coreography;
-    public List<BeatSection> coreographyPart2;
+    public List<BeatSection> coreographyHardMode;
 
     public bool isPlaying = false; // Determines with Update is ticking
 
@@ -76,7 +78,7 @@ public class BeatSystem : MonoBehaviour
         imageControl = GetComponent<ImageControl>();
         mirrorControl = FindFirstObjectByType<MirrorControl>();
 
-        currentChoreography = coreography;
+        currentChoreography = coreographyHardMode; // set in play function
 
         int i = 1;
         foreach (BeatSection section in currentChoreography) // loop over all parts to verify formatting of coreography 
@@ -128,7 +130,7 @@ public class BeatSystem : MonoBehaviour
 
                     if (currentSection >= currentChoreography.Count)
                     {
-                        Invoke("EndLevel", 2f); // Stop if we've reached the end
+                        Invoke("EndLevel", 6f); // Stop if we've reached the end
                         isPlaying = false;
                         return;
                     }
@@ -229,12 +231,28 @@ public class BeatSystem : MonoBehaviour
         }
     }
 
-    public void Play()
+    public void Play(int level)
     {
+        SetLevel(level);
         InitializeChunk(currentChunk, currentSection);
         FulfillChunkRequests();
         isPlaying = true;
         audioSource.Play();
+    }
+    public void SetLevel(int level)
+    {
+        mirrorControl.SetMirrorMode(1); // always start at with 1
+        if (level == 1)
+        {
+            audioSource.clip = trackOne;
+            currentChoreography = coreography;
+        }  
+        else if (level == 2)
+        {
+            audioSource.clip = trackTwo;
+            currentChoreography = coreographyHardMode;
+        }
+            
     }
 
     private void InitializeChunk(int currentChunk, int currentSection)
